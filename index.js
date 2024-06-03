@@ -49,8 +49,7 @@ async function run() {
 }
 run().catch(console.dir);
 
-
-
+//check connection to mongodb server
 app.get('/', (req, res) => {
     res.send('Connect 2 study server is running.....');
 })
