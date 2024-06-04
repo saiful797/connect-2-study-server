@@ -36,11 +36,18 @@ async function run() {
         if(existingUser){
           if(existingUser){
             return res.send({message: 'User already exist', insertedId: null})
-        }
+          }
         }
 
         const result = await usersCollection.insertOne(user);
         res.send( result );
+    })
+
+    // tutor related api
+    app.get('/tutor', async (req, res) =>{
+      const query = { role: 'tutor' };
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
     })
 
     app.get('/users', async( req, res ) => {
