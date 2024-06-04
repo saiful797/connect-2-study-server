@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     const usersCollection = client.db('connect2studyDB').collection('users');
+    const studySessionCollection = client.db('connect2studyDB').collection('studySessions');
 
     //user related api
     app.post('/users', async( req, res ) => {
@@ -44,10 +45,17 @@ async function run() {
     })
 
     // tutor related api
-    app.get('/tutor', async (req, res) =>{
+    app.get('/tutors', async (req, res) =>{
       const query = { role: 'tutor' };
       const result = await usersCollection.find(query).toArray();
       res.send(result);
+    })
+
+
+    //study sessions related api
+    app.get('/study-session', async ( req, res ) => {
+      const result = await studySessionCollection.find().toArray();
+      res.send( result );
     })
 
     app.get('/users', async( req, res ) => {
