@@ -3,6 +3,7 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const { param } = require('express/lib/request');
 const port = process.env.PORT || 9000;
 
 //middleware
@@ -58,7 +59,16 @@ async function run() {
       res.send( result );
     })
 
-    app.get('/users', async( req, res ) => {
+    // user role api
+    app.get('/role/:email', async (req, res) => {
+      const email = req.params.email;
+      const  query = {email: email}
+      const result = await usersCollection.findOne( query );
+      res.send(result);
+    })
+
+    // Admin related api
+    app.get('/allUsers', async( req, res ) => {
         const result = await usersCollection.find().toArray();
         res.send( result );
     })
