@@ -1,5 +1,5 @@
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
 const app = express();
 const cors = require('cors');
@@ -84,8 +84,19 @@ async function run() {
     })
 
     app.get("/allStudySessions", async ( req, res ) => {
-       const result = await studySessionCollection.find().sort({ "_id": -1 }).toArray();
-       res.send(result);
+      const result = await studySessionCollection.find().sort({ "_id": -1 }).toArray();
+      res.send(result);
+    })
+
+    app.patch('/study-session-reject/:id', async ( req, res ) => {
+      const filter = { _id: new ObjectId (req.params.id)};
+      const updateStudySession = {
+        $set: {
+          status: 'reject',
+        }
+      }
+      const result = await studySessionCollection.updateOne( filter, updateStudySession );
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
