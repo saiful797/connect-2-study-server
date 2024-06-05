@@ -31,18 +31,18 @@ async function run() {
 
     //user related api
     app.post('/users', async( req, res ) => {
-        const user = req.body;
-        const query = { email: user.email};
-        const existingUser = await usersCollection.findOne(query);
+      const user = req.body;
+      const query = { email: user.email};
+      const existingUser = await usersCollection.findOne(query);
 
+      if(existingUser){
         if(existingUser){
-          if(existingUser){
-            return res.send({message: 'User already exist', insertedId: null})
-          }
+          return res.send({message: 'User already exist', insertedId: null})
         }
+      }
 
-        const result = await usersCollection.insertOne(user);
-        res.send( result );
+      const result = await usersCollection.insertOne(user);
+      res.send( result );
     })
 
     // tutor related api
@@ -51,12 +51,16 @@ async function run() {
       const result = await usersCollection.find(query).toArray();
       res.send(result);
     })
-
-
-    //study sessions related api
     app.get('/study-session', async ( req, res ) => {
       const result = await studySessionCollection.find().toArray();
       res.send( result );
+    })
+
+    app.get('/all-sessions/:email', async ( req, res ) => {
+      const query = { email: req.params.email };
+      // console.log({email: req.params.email});
+      const result = await studySessionCollection.find(query).toArray();
+      res.send(result);
     })
 
     app.post('/study-session', async ( req, res ) => {
