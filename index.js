@@ -59,6 +59,12 @@ async function run() {
       res.send( result );
     })
 
+    app.post('/study-session', async ( req, res ) => {
+      const sessionInfo = req.body;
+      const result = await studySessionCollection.insertOne(sessionInfo);
+      res.send(result);
+    })
+
     // user role api
     app.get('/role/:email', async (req, res) => {
       const email = req.params.email;
