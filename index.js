@@ -79,8 +79,13 @@ async function run() {
 
     // Admin related api
     app.get('/allUsers', async( req, res ) => {
-        const result = await usersCollection.find().toArray();
-        res.send( result );
+      const result = await usersCollection.find().toArray();
+      res.send( result );
+    })
+
+    app.get("/allStudySessions", async ( req, res ) => {
+       const result = await studySessionCollection.find().sort({ "_id": -1 }).toArray();
+       res.send(result);
     })
 
     // Send a ping to confirm a successful connection
