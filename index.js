@@ -29,6 +29,19 @@ async function run() {
     const usersCollection = client.db('connect2studyDB').collection('users');
     const studySessionCollection = client.db('connect2studyDB').collection('studySessions');
 
+    // Common API for tutor and admin
+    app.patch('/study-session-rejected/:id', async ( req, res ) => {
+      const filter = { _id: new ObjectId (req.params.id)};
+      const data = req.body;
+      const updateStudySession = {
+        $set: {
+          status: data.status,
+        }
+      }
+      const result = await studySessionCollection.updateOne( filter, updateStudySession );
+      res.send(result)
+    })
+
     //user related api
     app.post('/users', async( req, res ) => {
       const user = req.body;
@@ -59,7 +72,7 @@ async function run() {
     app.get('/all-sessions/:email', async ( req, res ) => {
       const query = { email: req.params.email };
       // console.log({email: req.params.email});
-      const result = await studySessionCollection.find(query).toArray();
+      const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
       res.send(result);
     })
 
@@ -88,17 +101,6 @@ async function run() {
       res.send(result);
     })
 
-    app.patch('/study-session-reject/:id', async ( req, res ) => {
-      const filter = { _id: new ObjectId (req.params.id)};
-      const updateStudySession = {
-        $set: {
-          status: 'reject',
-        }
-      }
-      const result = await studySessionCollection.updateOne( filter, updateStudySession );
-      res.send(result)
-    })
-
     app.patch('/study-session-approved/:id', async ( req, res ) => {
       const filter = { _id: new ObjectId (req.params.id)};
       const data = req.body;
@@ -111,7 +113,7 @@ async function run() {
         }
       }
       const result = await studySessionCollection.updateOne( filter, updateStudySession );
-      res.send(result)
+      res.send( result )
     })
 
     // Send a ping to confirm a successful connection
