@@ -99,6 +99,21 @@ async function run() {
       res.send(result)
     })
 
+    app.patch('/study-session-approved/:id', async ( req, res ) => {
+      const filter = { _id: new ObjectId (req.params.id)};
+      const data = req.body;
+      const regFee = parseFloat(data.regFee);
+
+      const updateStudySession = {
+        $set: {
+          status: 'approved',
+          regFee: regFee,
+        }
+      }
+      const result = await studySessionCollection.updateOne( filter, updateStudySession );
+      res.send(result)
+    })
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
