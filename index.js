@@ -125,6 +125,14 @@ async function run() {
     })
 
     //Student related api
+    app.get('/student-notes/:email', async ( req, res ) => {
+      const email = req.params.email;
+      const query = { email: email }
+      const result = await notesCollection.find( query ).toArray()
+
+      res.send( result );
+    })
+
     app.post('/student-note', async ( req, res ) => {
       const result = await notesCollection.insertOne( req.body );
       res.send(result);
