@@ -124,6 +124,12 @@ async function run() {
       res.send( result )
     })
 
+    app.delete('/study-session-deleted/:id', async( req, res) => {
+      const query = {_id: new ObjectId( req.params.id )};
+      const result = await studySessionCollection.deleteOne( query );
+      res.send( result );
+    })
+
     //Student related api
     app.get('/student-notes/:email', async ( req, res ) => {
       const email = req.params.email;
