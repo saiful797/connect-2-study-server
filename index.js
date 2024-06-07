@@ -8,7 +8,15 @@ const port = process.env.PORT || 9000;
 
 //middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175",
+    
+  ],
+  credentials: true,
+}));
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.a3qxp45.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
