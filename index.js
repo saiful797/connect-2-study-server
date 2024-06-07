@@ -30,14 +30,21 @@ async function run() {
     const studySessionCollection = client.db('connect2studyDB').collection('studySessions');
 
     // Common API for tutor and admin
-    // app.get('/study-session', async ( req, res ) => {
-    //   const result = await studySessionCollection.find().toArray();
-    //   res.send( result );
-    // })
+    app.get('/approved-study-session', async ( req, res ) => {
+      const query = { status: 'approved'}
+      const result = await studySessionCollection.find(query).toArray();
+      res.send( result );
+    })
+
+    app.get('/specific-session/:id', async (req, res) => {
+      const query = { _id: new ObjectId ( req.params.id )};
+      const result = await studySessionCollection.findOne(query);
+      res.send( result );
+    })
 
     app.get('/user/role/:email', async (req, res) => {
       const email = req.params.email;
-      const  query = {email: email}
+      const  query = { email: email }
       const result = await usersCollection.findOne( query );
       res.send( result );
     })
