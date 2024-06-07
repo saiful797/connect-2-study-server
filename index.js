@@ -133,9 +133,29 @@ async function run() {
       res.send( result );
     })
 
+    app.get('/specific-student-notes/:id', async( req, res ) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId (id)};
+      const result = await notesCollection.findOne( query );
+      res.send(result);
+    })
+
     app.post('/student-note', async ( req, res ) => {
       const result = await notesCollection.insertOne( req.body );
       res.send(result);
+    })
+
+    app.patch('/update-student-note/:id', async ( req, res ) => {
+      const filter = {_id: new ObjectId ( req.params.id )};
+      console.log( filter )
+      const data = req.body;
+      const updateDoc = {
+        $set: {
+          ...data,
+        }
+      }
+      const result = await notesCollection.updateOne( filter, updateDoc );
+      res.send( result );
     })
 
     app.delete('/student-note/:id', async ( req, res ) => {
