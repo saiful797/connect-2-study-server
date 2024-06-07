@@ -87,7 +87,6 @@ async function run() {
 
     app.get('/all-sessions/:email', async ( req, res ) => {
       const query = { email: req.params.email };
-      // console.log({email: req.params.email});
       const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
       res.send(result);
     })
