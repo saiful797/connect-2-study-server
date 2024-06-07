@@ -28,6 +28,7 @@ async function run() {
 
     const usersCollection = client.db('connect2studyDB').collection('users');
     const studySessionCollection = client.db('connect2studyDB').collection('studySessions');
+    const notesCollection = client.db('connect2studyDB').collection('notes');
 
     // Common API for tutor and admin
     app.get('/approved-study-session', async ( req, res ) => {
@@ -121,6 +122,12 @@ async function run() {
       }
       const result = await studySessionCollection.updateOne( filter, updateStudySession );
       res.send( result )
+    })
+
+    //Student related api
+    app.post('/student-note', async ( req, res ) => {
+      const result = await notesCollection.insertOne( req.body );
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
