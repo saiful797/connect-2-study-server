@@ -158,6 +158,11 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/student-booked-sessions/:email', async (req, res ) => {
+      const query = { student_email: req.params.email }
+      const result = await sessionsBookedCollection.find(query).toArray();
+      res.send( result )
+    })
     app.post('/study-session-booked', async( req, res ) => {
       const bookedInfo = req.body;
       const result = await sessionsBookedCollection.insertOne( bookedInfo );
