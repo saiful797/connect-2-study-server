@@ -154,7 +154,7 @@ async function run() {
     })
 
     app.get('/all-session-material', async ( req, res ) => {
-      res.send( await sessionMaterialsCollection.find().toArray());
+      res.send( await sessionMaterialsCollection.find().sort({_id: -1}).toArray());
     })
 
     app.patch('/study-session-approved/:id', async ( req, res ) => {
