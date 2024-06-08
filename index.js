@@ -124,6 +124,18 @@ async function run() {
       res.send(result);
     })
 
+    app.patch('/study-material/:id', async ( req, res ) =>{
+      const filter = {_id: new ObjectId(  req.params.id )};
+      const materialData = req.body;
+      const materials = {
+        $set: {
+          ...materialData
+        }
+      }
+      const result = await sessionMaterialsCollection.updateOne( filter, materials );
+      res.send( result );
+    })
+
     app.delete('/session-material/:id', async ( req, res ) => {
       const query = { _id: new ObjectId ( req.params.id )}
       const result = await sessionMaterialsCollection.deleteOne( query );
