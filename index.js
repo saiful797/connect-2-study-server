@@ -102,7 +102,8 @@ async function run() {
     })
 
     app.get('/study-session-material/:email', async ( req, res ) => {
-      const result = await sessionMaterialsCollection.find({email: req.params.email});
+      const query = { email: req.params.email};
+      const result = await sessionMaterialsCollection.find( query ).sort({ _id: -1 }).toArray();
       res.send( result );
     })
 
@@ -114,6 +115,12 @@ async function run() {
 
     app.post('/study-session-material', async ( req, res ) => {
       const result = await sessionMaterialsCollection.insertOne ( req.body );
+      res.send(result);
+    })
+
+    app.delete('/session-material/:id', async ( req, res ) => {
+      const query = { _id: new ObjectId ( req.params.id )}
+      const result = await sessionMaterialsCollection.deleteOne( query );
       res.send(result);
     })
 
