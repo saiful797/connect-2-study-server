@@ -107,7 +107,7 @@ async function run() {
       res.send( result );
     })
 
-    app.get('/specific-session-material/:id', async ( req, res ) => {
+    app.get('-study/:id', async ( req, res ) => {
       const query = {_id: new ObjectId( req.params.id )}
       const result = await sessionMaterialsCollection.findOne( query )
       res.send( result );
@@ -176,6 +176,12 @@ async function run() {
       const query = {_id: new ObjectId( req.params.id )};
       const result = await studySessionCollection.deleteOne( query );
       res.send( result );
+    })
+
+    app.delete('/specific-study-session-material/:id', async ( req, res ) => {
+      const query = { _id: new ObjectId ( req.params.id )}
+      const result = await sessionMaterialsCollection.deleteOne( query );
+      res.send(result);
     })
 
     //Student related api
