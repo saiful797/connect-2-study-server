@@ -101,6 +101,11 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/study-session-material/:email', async ( req, res ) => {
+      const result = await sessionMaterialsCollection.find({email: req.params.email});
+      res.send( result );
+    })
+
     app.post('/study-session', async ( req, res ) => {
       const sessionInfo = req.body;
       const result = await studySessionCollection.insertOne(sessionInfo);
