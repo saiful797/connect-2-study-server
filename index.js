@@ -153,7 +153,7 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/specific-session-material', async ( req, res ) => {
+    app.get('/all-session-material', async ( req, res ) => {
       res.send( await sessionMaterialsCollection.find().toArray());
     })
 
