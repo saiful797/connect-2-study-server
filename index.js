@@ -38,6 +38,7 @@ async function run() {
     const notesCollection = client.db('connect2studyDB').collection('notes');
     const sessionsBookedCollection = client.db('connect2studyDB').collection('bookedSessions');
     const reviewsCollection = client.db('connect2studyDB').collection('reviews');
+    const sessionMaterialsCollection = client.db('connect2studyDB').collection('sessionMaterials');
 
     // Common API for tutor and admin
     app.get('/approved-study-session', async ( req, res ) => {
@@ -103,6 +104,11 @@ async function run() {
     app.post('/study-session', async ( req, res ) => {
       const sessionInfo = req.body;
       const result = await studySessionCollection.insertOne(sessionInfo);
+      res.send(result);
+    })
+
+    app.post('/study-session-material', async ( req, res ) => {
+      const result = await sessionMaterialsCollection.insertOne ( req.body );
       res.send(result);
     })
 
