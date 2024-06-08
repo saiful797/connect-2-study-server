@@ -166,8 +166,9 @@ async function run() {
     })
 
     app.post('/student-review', async ( req, res ) =>{
-       const data = req.body;
-      console.log( data );
+      const data = req.body;
+      const result = await reviewsCollection.insertOne( data );
+      res.send(result);
     })
 
     app.post('/study-session-booked', async( req, res ) => {
