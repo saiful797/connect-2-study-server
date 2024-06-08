@@ -153,6 +153,10 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/specific-session-material', async ( req, res ) => {
+      res.send( await sessionMaterialsCollection.find().toArray());
+    })
+
     app.patch('/study-session-approved/:id', async ( req, res ) => {
       const filter = { _id: new ObjectId (req.params.id)};
       const data = req.body;
