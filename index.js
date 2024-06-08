@@ -107,6 +107,12 @@ async function run() {
       res.send( result );
     })
 
+    app.get('/specific-session-material/:id', async ( req, res ) => {
+      const query = {_id: new ObjectId( req.params.id )}
+      const result = await sessionMaterialsCollection.findOne( query )
+      res.send( result );
+    })
+
     app.post('/study-session', async ( req, res ) => {
       const sessionInfo = req.body;
       const result = await studySessionCollection.insertOne(sessionInfo);
