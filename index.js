@@ -143,7 +143,7 @@ async function run() {
       const result = await usersCollection.find(query).toArray();
       res.send(result);
     })
-    
+
     app.post('/users', async( req, res ) => {
       const user = req.body;
       const query = { email: user.email};
@@ -157,56 +157,8 @@ async function run() {
       res.send( result );
     })
 
-    // tutor related api
-    app.get('/all-sessions/:email', verifyToken, verifyTutor, async ( req, res ) => {
-      const query = { email: req.params.email };
-      const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
-      res.send(result);
-    })
-
-    app.get('/study-session-materials/:email', verifyToken, verifyTutor, async ( req, res ) => {
-      const query = { email: req.params.email};
-      const result = await sessionMaterialsCollection.find( query ).sort({ _id: -1 }).toArray();
-      res.send( result );
-    })
-
-    app.get('/material/:id',verifyToken, verifyTutor, async ( req, res ) => {
-      const query = {_id: new ObjectId( req.params.id )}
-      const result = await sessionMaterialsCollection.findOne( query )
-      res.send( result );
-    })
-
-    app.post('/study-session', async ( req, res ) => {
-      const sessionInfo = req.body;
-      const result = await studySessionCollection.insertOne(sessionInfo);
-      res.send(result);
-    })
-
-    app.post('/study-session-material' , async ( req, res ) => {
-      const result = await sessionMaterialsCollection.insertOne ( req.body );
-      res.send(result);
-    })
-
-    app.patch('/study-material/:id' , async ( req, res ) =>{
-      const filter = {_id: new ObjectId(  req.params.id )};
-      const materialData = req.body;
-      const materials = {
-        $set: {
-          ...materialData
-        }
-      }
-      const result = await sessionMaterialsCollection.updateOne( filter, materials );
-      res.send( result );
-    })
-
-    app.delete('/session-material/:id' , async ( req, res ) => {
-      const query = { _id: new ObjectId ( req.params.id )}
-      const result = await sessionMaterialsCollection.deleteOne( query );
-      res.send(result);
-    })
-
-    // Admin related api
-    app.get('/allUsers',verifyToken, verifyAdmin, async( req, res ) => {
+     // Admin related api
+     app.get('/allUsers',verifyToken, verifyAdmin, async( req, res ) => {
       const result = await usersCollection.find().toArray();
       res.send( result );
     })
@@ -254,6 +206,54 @@ async function run() {
     })
 
     app.delete('/specific-study-session-material/:id' , async ( req, res ) => {
+      const query = { _id: new ObjectId ( req.params.id )}
+      const result = await sessionMaterialsCollection.deleteOne( query );
+      res.send(result);
+    })
+
+    // tutor related api
+    app.get('/all-sessions/:email', verifyToken, verifyTutor, async ( req, res ) => {
+      const query = { email: req.params.email };
+      const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
+      res.send(result);
+    })
+
+    app.get('/study-session-materials/:email', verifyToken, verifyTutor, async ( req, res ) => {
+      const query = { email: req.params.email};
+      const result = await sessionMaterialsCollection.find( query ).sort({ _id: -1 }).toArray();
+      res.send( result );
+    })
+
+    app.get('/material/:id',verifyToken, verifyTutor, async ( req, res ) => {
+      const query = {_id: new ObjectId( req.params.id )}
+      const result = await sessionMaterialsCollection.findOne( query )
+      res.send( result );
+    })
+
+    app.post('/study-session', async ( req, res ) => {
+      const sessionInfo = req.body;
+      const result = await studySessionCollection.insertOne(sessionInfo);
+      res.send(result);
+    })
+
+    app.post('/study-session-material' , async ( req, res ) => {
+      const result = await sessionMaterialsCollection.insertOne ( req.body );
+      res.send(result);
+    })
+
+    app.patch('/study-material/:id' , async ( req, res ) =>{
+      const filter = {_id: new ObjectId(  req.params.id )};
+      const materialData = req.body;
+      const materials = {
+        $set: {
+          ...materialData
+        }
+      }
+      const result = await sessionMaterialsCollection.updateOne( filter, materials );
+      res.send( result );
+    })
+
+    app.delete('/session-material/:id' , async ( req, res ) => {
       const query = { _id: new ObjectId ( req.params.id )}
       const result = await sessionMaterialsCollection.deleteOne( query );
       res.send(result);
