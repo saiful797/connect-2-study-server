@@ -218,6 +218,12 @@ async function run() {
       res.send( result )
     })
 
+    app.get('/booked-session-materials/:id', async ( req, res ) => {
+      const query = { sessionID: req.params.id };
+      const result = await sessionMaterialsCollection.find( query ).toArray();
+      res.send( result )
+    })
+
     app.post('/student-note', async ( req, res ) => {
       const result = await notesCollection.insertOne( req.body );
       res.send(result);
