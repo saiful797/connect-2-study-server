@@ -172,6 +172,18 @@ async function run() {
       res.send( result )
     })
 
+    app.patch('/user-role-change/:id', async ( req, res ) => {
+      const filter = {_id: new ObjectId( req.params.id )};
+      const data = req.body;
+      const updateDoc = {
+        $set:{
+          role: data.role,
+        }
+      }
+      const result = await usersCollection.updateOne( filter, updateDoc );
+      res.send( result );
+    })
+
     app.delete('/study-session-deleted/:id', async( req, res) => {
       const query = {_id: new ObjectId( req.params.id )};
       const result = await studySessionCollection.deleteOne( query );
