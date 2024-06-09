@@ -138,6 +138,12 @@ async function run() {
     })
 
     //user related api
+    app.get('/tutors', async (req, res) =>{
+      const query = { role: 'tutor' };
+      const result = await usersCollection.find(query).toArray();
+      res.send(result);
+    })
+    
     app.post('/users', async( req, res ) => {
       const user = req.body;
       const query = { email: user.email};
@@ -152,12 +158,6 @@ async function run() {
     })
 
     // tutor related api
-    app.get('/tutors', async (req, res) =>{
-      const query = { role: 'tutor' };
-      const result = await usersCollection.find(query).toArray();
-      res.send(result);
-    })
-
     app.get('/all-sessions/:email', verifyToken, verifyTutor, async ( req, res ) => {
       const query = { email: req.params.email };
       const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
@@ -170,7 +170,7 @@ async function run() {
       res.send( result );
     })
 
-    app.get('/material/:id', async ( req, res ) => {
+    app.get('/material/:id',verifyToken, verifyTutor, async ( req, res ) => {
       const query = {_id: new ObjectId( req.params.id )}
       const result = await sessionMaterialsCollection.findOne( query )
       res.send( result );
