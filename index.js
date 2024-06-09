@@ -42,6 +42,7 @@ async function run() {
     const sessionsBookedCollection = client.db('connect2studyDB').collection('bookedSessions');
     const reviewsCollection = client.db('connect2studyDB').collection('reviews');
     const sessionMaterialsCollection = client.db('connect2studyDB').collection('sessionMaterials');
+    const feedbackCollection = client.db('connect2studyDB').collection('rejectFeedback');
 
     //jwt related API
     app.post('/jwt', async (req, res) => {
@@ -185,6 +186,11 @@ async function run() {
       }
       const result = await studySessionCollection.updateOne( filter, updateStudySession );
       res.send( result )
+    })
+
+    app.post('/admin-rejection-feedback', async ( req, res ) => {
+      const result = await feedbackCollection.insertOne(req.body);
+      res.send( result );
     })
 
     app.patch('/user-role-change/:id' , async ( req, res ) => {
