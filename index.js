@@ -48,7 +48,25 @@ async function run() {
       const user = req.body;
       const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
       res.send({ token })
-  })
+    })
+
+    // middlewares
+    const verifyToken = (req, res, next) =>{
+      // console.log('Inside verifiedToken:  ',req.headers.authorization);
+
+      if(!req.headers.authorization){
+          return res.status(401).send({message: 'Unauthorized Access!!!'});
+      }
+
+      const token = req.headers.authorization.split(' ')[1];
+      jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err , decoded) => {
+          if(err){
+              return res.status(401).send({message: 'Unauthorized Access!!!'});
+          }
+          req.decoded = decoded;
+          next();
+      })
+    }
 
     // Common API for tutor and admin
     app.get('/approved-study-session', async ( req, res ) => {
