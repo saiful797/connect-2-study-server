@@ -236,6 +236,11 @@ async function run() {
       res.send( result );
     })
 
+    app.get('/session-reject-feedback/:email', async ( req, res ) => {
+      const result = await feedbackCollection.find({ email: req.params.email }).toArray();
+      res.send( result );
+    })
+
     app.post('/study-session', async ( req, res ) => {
       const sessionInfo = req.body;
       const result = await studySessionCollection.insertOne(sessionInfo);
@@ -263,6 +268,11 @@ async function run() {
       const query = { _id: new ObjectId ( req.params.id )}
       const result = await sessionMaterialsCollection.deleteOne( query );
       res.send(result);
+    })
+
+    app.delete('/session-feedback-delete/:id', async ( req, res ) => {
+      const result = await feedbackCollection.deleteOne({_id: new ObjectId ( req.params.id )});
+      res.send( result );
     })
 
     //Student related api
