@@ -281,7 +281,7 @@ async function run() {
       res.send( result )
     })
 
-    app.get('/booked-session-materials/:id', async ( req, res ) => {
+    app.get('/booked-session-materials/:id', verifyToken,verifyStudent, async ( req, res ) => {
       const query = { sessionID: req.params.id };
       const result = await sessionMaterialsCollection.find( query ).toArray();
       res.send( result )
