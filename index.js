@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const app = express();
 const cors = require('cors');
 const { param } = require('express/lib/request');
@@ -41,6 +42,13 @@ async function run() {
     const sessionsBookedCollection = client.db('connect2studyDB').collection('bookedSessions');
     const reviewsCollection = client.db('connect2studyDB').collection('reviews');
     const sessionMaterialsCollection = client.db('connect2studyDB').collection('sessionMaterials');
+
+    //jwt related API
+    app.post('/jwt', async (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '7d'});
+      res.send({ token })
+  })
 
     // Common API for tutor and admin
     app.get('/approved-study-session', async ( req, res ) => {
