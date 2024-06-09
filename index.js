@@ -164,6 +164,11 @@ async function run() {
       res.send( result );
     })
 
+    app.get('/user/:email', async ( req, res ) => {
+      const result = await usersCollection.find({ email: req.params.email }).toArray();
+      res.send( result );
+    })
+
     app.get("/allStudySessions",verifyToken, verifyAdmin, async ( req, res ) => {
       const result = await studySessionCollection.find().sort({ "_id": -1 }).toArray();
       res.send(result);
