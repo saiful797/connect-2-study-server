@@ -68,6 +68,43 @@ async function run() {
       })
     }
 
+    // user verify admin after --> (verifyToken)
+    const verifyAdmin = async (req, res, next) => {
+      const email= req.decoded.email;
+      const query = { email: email};
+      const user = await usersCollection.findOne(query);
+      const isAdmin = user?.role === 'admin';
+      if(!isAdmin){
+          return res.status(403).send({message: "Forbidden Access!!!"})
+      }
+
+      next();
+    }
+
+    // user verify Tutor after --> (verifyToken)
+    const verifyTutor = async (req, res, next) => {
+      const email= req.decoded.email;
+      const query = { email: email};
+      const user = await usersCollection.findOne(query);
+      const isAdmin = user?.role === 'tutor';
+      if(!isAdmin){
+          return res.status(403).send({message: "Forbidden Access!!!"})
+      }
+      next();
+    }
+
+    // user verify Tutor after --> (verifyToken)
+    const verifyStudent = async (req, res, next) => {
+      const email= req.decoded.email;
+      const query = { email: email};
+      const user = await usersCollection.findOne(query);
+      const isAdmin = user?.role === 'student';
+      if(!isAdmin){
+          return res.status(403).send({message: "Forbidden Access!!!"})
+      }
+      next();
+    }
+
     // Common API for tutor and admin
     app.get('/approved-study-session', async ( req, res ) => {
       const query = { status: 'approved'}
@@ -121,13 +158,13 @@ async function run() {
       res.send(result);
     })
 
-    app.get('/all-sessions/:email', async ( req, res ) => {
+    app.get('/all-sessions/:email', verifyToken, verifyTutor, async ( req, res ) => {
       const query = { email: req.params.email };
       const result = await studySessionCollection.find(query).sort({ _id: -1 }).toArray();
       res.send(result);
     })
 
-    app.get('/study-session-materials/:email', verifyToken, async ( req, res ) => {
+    app.get('/study-session-materials/:email', verifyToken, verifyTutor, async ( req, res ) => {
       const query = { email: req.params.email};
       const result = await sessionMaterialsCollection.find( query ).sort({ _id: -1 }).toArray();
       res.send( result );
@@ -169,17 +206,17 @@ async function run() {
     })
 
     // Admin related api
-    app.get('/allUsers',verifyToken, async( req, res ) => {
+    app.get('/allUsers',verifyToken, verifyAdmin, async( req, res ) => {
       const result = await usersCollection.find().toArray();
       res.send( result );
     })
 
-    app.get("/allStudySessions",verifyToken, async ( req, res ) => {
+    app.get("/allStudySessions",verifyToken, verifyAdmin, async ( req, res ) => {
       const result = await studySessionCollection.find().sort({ "_id": -1 }).toArray();
       res.send(result);
     })
 
-    app.get('/all-session-material',verifyToken, async ( req, res ) => {
+    app.get('/all-session-material',verifyToken, verifyAdmin, async ( req, res ) => {
       res.send( await sessionMaterialsCollection.find().sort({_id: -1}).toArray());
     })
 
@@ -223,7 +260,7 @@ async function run() {
     })
 
     //Student related api
-    app.get('/student-notes/:email', verifyToken, async ( req, res ) => {
+    app.get('/student-notes/:email', verifyToken,verifyStudent, async ( req, res ) => {
       const email = req.params.email;
       const query = { email: email }
       const result = await notesCollection.find( query ).toArray()
@@ -231,14 +268,14 @@ async function run() {
       res.send( result );
     })
 
-    app.get('/specific-student-notes/:id', async( req, res ) => {
+    app.get('/specific-student-notes/:id',  verifyToken,verifyStudent, async( req, res ) => {
       const id = req.params.id;
       const query = {_id: new ObjectId (id)};
       const result = await notesCollection.findOne( query );
       res.send(result);
     })
 
-    app.get('/student-booked-sessions/:email', verifyToken, async (req, res ) => {
+    app.get('/student-booked-sessions/:email',  verifyToken,verifyStudent, async (req, res ) => {
       const query = { student_email: req.params.email }
       const result = await sessionsBookedCollection.find(query).toArray();
       res.send( result )
