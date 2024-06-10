@@ -44,7 +44,8 @@ async function run() {
     const reviewsCollection = client.db('connect2studyDB').collection('reviews');
     const sessionMaterialsCollection = client.db('connect2studyDB').collection('sessionMaterials');
     const feedbackCollection = client.db('connect2studyDB').collection('rejectFeedback');
-    const paymentsCollection = client.db('connect2studyDB').collection('payments');
+    const paymentsCollection = client.db('connect2studyDB').collection('payments'); 
+    const announcementsCollection = client.db('connect2studyDB').collection('announcements'); 
 
     //jwt related API
     app.post('/jwt', async (req, res) => {
@@ -253,6 +254,11 @@ async function run() {
     app.post('/admin-rejection-feedback', async ( req, res ) => {
       const result = await feedbackCollection.insertOne(req.body);
       res.send( result );
+    })
+
+    app.post('/admin-announcement', async ( req, res ) => {
+      const result = await announcementsCollection.insertOne( req.body );
+      res.send(result);
     })
 
     app.patch('/user-role-change/:id' , async ( req, res ) => {
