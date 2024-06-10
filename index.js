@@ -116,6 +116,11 @@ async function run() {
       res.send( result );
     })
 
+    app.get('/all-announcements', async (req, res) =>{
+      const result = await announcementsCollection.find().sort({_id: -1}).toArray();
+      res.send(result);
+    })
+
     // check user role status 'admin or not'
     app.get('/users/admin/:email', verifyToken, async ( req, res ) => {
       const email = req.params.email;
