@@ -164,8 +164,12 @@ async function run() {
       res.send( result );
     })
 
-    app.get('/user/:email', async ( req, res ) => {
+    app.get('/user-search-by-email/:email', async ( req, res ) => {
       const result = await usersCollection.find({ email: req.params.email }).toArray();
+      res.send( result );
+    })
+    app.get('/user-search-by-name/:name', async ( req, res ) => {
+      const result = await usersCollection.find({ name: req.params.name }).toArray();
       res.send( result );
     })
 
