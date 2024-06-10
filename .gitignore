@@ -1,3 +1,4 @@
+# ignore files
 .env
 node_modules
 .vercel

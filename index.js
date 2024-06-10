@@ -36,7 +36,6 @@ async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
-
     const usersCollection = client.db('connect2studyDB').collection('users');
     const studySessionCollection = client.db('connect2studyDB').collection('studySessions');
     const notesCollection = client.db('connect2studyDB').collection('notes');
