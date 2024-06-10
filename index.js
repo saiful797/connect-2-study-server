@@ -1,11 +1,12 @@
 require('dotenv').config();
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const app = express();
 const cors = require('cors');
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 9000;
+const { parse } = require('dotenv');
 
 //middleware
 app.use(express.json());
@@ -376,20 +377,20 @@ async function run() {
       res.send(result);
   });
 
-  app.post('/payments', async ( req, res ) => {
-      const payment = req.body;
-      const paymentResult = await paymentsCollection.insertOne(payment);
+  // app.post('/payments', async ( req, res ) => {
+  //     const payment = req.body;
+  //     const paymentResult = await paymentsCollection.insertOne(payment);
 
-      //carefully delete each item from the cart
-      console.log('Payment Info: ', payment);
+  //     //carefully delete each item from the cart
+  //     console.log('Payment Info: ', payment);
       
-      const query = {_id: {
-          $in: payment.cartIds.map(id => new ObjectId(id))
-      }}
-      const deleteResult = await cartCollection.deleteMany(query);
+  //     const query = {_id: {
+  //         $in: payment.cartIds.map(id => new ObjectId(id))
+  //     }}
+  //     const deleteResult = await cartCollection.deleteMany(query);
 
-      res.send({ paymentResult, deleteResult });
-  })
+  //     res.send({ paymentResult, deleteResult });
+  // })
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
