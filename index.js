@@ -115,39 +115,56 @@ async function run() {
       res.send( result );
     })
 
-   // check user role status 'admin or not'
-   app.get('/users/admin/:email', verifyToken, async ( req, res ) => {
-    const email = req.params.email;
-    if(email !== req.decoded.email){
-        return res.status(403).send({message: 'Forbidden Access!!!'});
-    }
+    // check user role status 'admin or not'
+    app.get('/users/admin/:email', verifyToken, async ( req, res ) => {
+      const email = req.params.email;
+      if(email !== req.decoded.email){
+          return res.status(403).send({message: 'Forbidden Access!!!'});
+      }
 
-    const query = {email: email};
-    const user = await usersCollection.findOne(query);
-    let isAdmin = false;
-    if(user){
-        isAdmin = user?.role === 'admin'
-    }
+      const query = {email: email};
+      const user = await usersCollection.findOne(query);
+      let isAdmin = false;
+      if(user){
+          isAdmin = user?.role === 'admin'
+      }
 
-    res.send({ isAdmin});
-  })
+      res.send({ isAdmin});
+    })
 
-   // check user role status 'tutor or not'
-   app.get('/users/tutor/:email', verifyToken, async ( req, res ) => {
-    const email = req.params.email;
-    if(email !== req.decoded.email){
-        return res.status(403).send({message: 'Forbidden Access!!!'});
-    }
+    // check user role status 'tutor or not'
+    app.get('/users/tutor/:email', verifyToken, async ( req, res ) => {
+      const email = req.params.email;
+      if(email !== req.decoded.email){
+          return res.status(403).send({message: 'Forbidden Access!!!'});
+      }
 
-    const query = {email: email};
-    const user = await usersCollection.findOne(query);
-    let isTutor = false;
-    if(user){
-        isTutor = user?.role === 'tutor'
-    }
+      const query = {email: email};
+      const user = await usersCollection.findOne(query);
+      let isTutor = false;
+      if(user){
+          isTutor = user?.role === 'tutor'
+      }
 
-    res.send({ isTutor});
-  })
+      res.send({ isTutor});
+    })
+
+    // check user role status 'student or not'
+    app.get('/users/student/:email', verifyToken, async ( req, res ) => {
+      const email = req.params.email;
+      if(email !== req.decoded.email){
+          return res.status(403).send({message: 'Forbidden Access!!!'});
+      }
+
+      const query = {email: email};
+      const user = await usersCollection.findOne(query);
+      let isStudent = false;
+      if(user){
+          isStudent = user?.role === 'student'
+      }
+
+      res.send({ isStudent});
+    })
 
     app.get('/specific-session/:id', async (req, res) => {
       const query = { _id: new ObjectId ( req.params.id )};
