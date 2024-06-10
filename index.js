@@ -132,6 +132,23 @@ async function run() {
     res.send({ isAdmin});
   })
 
+   // check user role status 'tutor or not'
+   app.get('/users/tutor/:email', verifyToken, async ( req, res ) => {
+    const email = req.params.email;
+    if(email !== req.decoded.email){
+        return res.status(403).send({message: 'Forbidden Access!!!'});
+    }
+
+    const query = {email: email};
+    const user = await usersCollection.findOne(query);
+    let isTutor = false;
+    if(user){
+        isTutor = user?.role === 'tutor'
+    }
+
+    res.send({ isTutor});
+  })
+
     app.get('/specific-session/:id', async (req, res) => {
       const query = { _id: new ObjectId ( req.params.id )};
       const result = await studySessionCollection.findOne(query);
