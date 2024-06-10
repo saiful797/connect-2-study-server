@@ -115,6 +115,23 @@ async function run() {
       res.send( result );
     })
 
+   // check user role status 'admin or not'
+   app.get('/users/admin/:email', verifyToken, async ( req, res ) => {
+    const email = req.params.email;
+    if(email !== req.decoded.email){
+        return res.status(403).send({message: 'Forbidden Access!!!'});
+    }
+
+    const query = {email: email};
+    const user = await usersCollection.findOne(query);
+    let isAdmin = false;
+    if(user){
+        isAdmin = user?.role === 'admin'
+    }
+
+    res.send({ isAdmin});
+  })
+
     app.get('/specific-session/:id', async (req, res) => {
       const query = { _id: new ObjectId ( req.params.id )};
       const result = await studySessionCollection.findOne(query);
