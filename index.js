@@ -120,6 +120,11 @@ async function run() {
       res.send(result);
     })
 
+    app.get('/all-free-sessions', async ( req, res ) => {
+      const result = await studySessionCollection.find({ regFee:  0 }).toArray();
+      res.send( result );
+    })
+
     // check user role status 'admin or not'
     app.get('/users/admin/:email', verifyToken, async ( req, res ) => {
       const email = req.params.email;
@@ -289,6 +294,11 @@ async function run() {
       res.send(result);
     })
 
+    app.delete('/delete-a-user/:id', async (req, res) => {
+      const result = await usersCollection.deleteOne({ _id: new ObjectId ( req.params.id )});
+      res.send( result );
+    })
+
     // tutor related api
     app.get('/all-sessions/:email', verifyToken, verifyTutor, async ( req, res ) => {
       const query = { email: req.params.email };
@@ -449,8 +459,8 @@ async function run() {
   })
 
     // Send a ping to confirm a successful connection
-    // await client.db("admin").command({ ping: 1 });
-    // console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    await client.db("admin").command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
